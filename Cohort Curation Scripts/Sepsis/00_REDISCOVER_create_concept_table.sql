@@ -1,9 +1,9 @@
 /*
 Filename:
-00_CURE_ID_create_concept_table.sql
+00_REDISCOVER_create_concept_table.sql
 
 Purpose:
-Create a table of concepts required for the CureID Registry
+Create a table of concepts required for the REDISCOVER-ICU Registry
 
 Description:
 Establish the schema, insert values for required concepts
@@ -12,8 +12,8 @@ Dependencies:
 None
 */
 
-DROP TABLE IF EXISTS [Results].[cure_id_concepts];
-CREATE TABLE [Results].[cure_id_concepts]
+DROP TABLE IF EXISTS [Results].[REDISCOVER_concepts];
+CREATE TABLE [Results].[REDISCOVER_concepts]
 (
     concept_id INTEGER NOT NULL,
     concept_code VARCHAR(50) NULL,
@@ -23,7 +23,7 @@ CREATE TABLE [Results].[cure_id_concepts]
     is_standard VARCHAR(50) NULL,
     include_descendants VARCHAR(50) NULL
 )
-INSERT INTO [Results].[cure_id_concepts]
+INSERT INTO [Results].[REDISCOVER_concepts]
 VALUES
 ('317009', '195967001', 'Asthma', 'Condition', 'SNOMED', 'S', 'TRUE'),
 ('4028244', '128292002', 'Chronic disease of cardiovascular system', 'Condition', 'SNOMED', 'S', 'TRUE'),
