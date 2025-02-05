@@ -12,6 +12,10 @@ The Cohort is comprised of the anonymized person_id, birthdate, and visit_start_
 
 ## Explanation of the Curation Script Files: 
 
+**00 - Create Concept Table**
+- Creates "rediscover_concepts" for all values captured by REDISCOVER-ICU
+- Additional concepts can be requested by contacting @SmittyHeavner
+
 **01 - Create Cohort** (this section has not yet been updated from CURE ID)
 - Identifies all patients with a positive lab result measurement, patient_id and first positive lab result
 - Identifies all patients with a "strong" or "weak" COVID diagnosis based on condition codes
@@ -45,45 +49,4 @@ In summary, the Cohort contains patients who were hospitalized with COVID, and e
 - Five different scripts to create different profiles from the Cohort created in previous steps.
 - Condition, Measurement, Drug Exposure, Unmapped Drugs, Device
 
---------------------------------------------------------------------------------------------------
 
-## Explanation of the Concept Files
-
-**Parent Only**: A csv that contains only the parent (highest in the hierarchy) concepts used within the registry. When adding concepts, check 1) is the concept a parent concept and 2) if not, is the parent concept already included within the file
-
-**Parent Only with Descendants**: A list of all parent concepts, where we track and include all descendants. This is primarily used for ATLAS concept set creation.
-
-**Parent Only no Descendants**: A list of all parent concepts, where we do not track descendants. This is primarily used for ATLAS concept set creation.
-
-**Concept All**: All concepts, parents or descendents. When adding concepts, check if you wish to include or exclude specific descendent concepts.
-
-**Conditions, Device Exposure, Measurements, Observations, Person, Procedures** :JSON representations of each of the parent concepts, separated by OMOP domain. You can use this JSON format to directly import/export as concept sets within ATLAS. When changing concepts, it may be easier to create the respective concept set already within ATLAS, make the edits there, export as JSON and overwrite this file. 
-
---------------------------------------------------------------------------------------------------
-
-## Workflow of Adding a Concept (this section has not yet been updated from CURE ID)
-##### (Having ATLAS set up extremely recommended)
-
-
-
-#### Section 1: I Do Not See/Have Access to the CURE ID Concept Set in ATLAS (if you do, skip to Section 2)
-
-If you do not see the pre-existing concept set, you will need to create a version yourself first.
-1. In ATLAS, click the "Concept Sets" tab on the sidebar.
-2. In the upper right corner, click "New Concept Set".
-3. Click the "Import Tab"
-4. Copy and paste the contents of the "OMOP_concepts_parent_with_descendants.txt" folder, and click the "Descendants" button. Add these to the concept set.
-5. Copy and paste the contents of the "OMOP_concepts_parent_without_descendants.txt" folder, making sure NOT to tick the "Descendants" button. Add these to the concept set.
-
-#### Section 2: I Have Access to the CURE ID Concept Set in ATLAS
-
-Say we want to add a concept X into the set. 
-
-1. Consider if X is a parent concept, or if it is a child concept of a pre-existing one.
-2. Append it to the corresponding file: "OMOP_concepts_parent" with or without. 
-3. Go to the Cure ID Concept Set.
-4. Click Import, and paste X. Click the "Descendants" button, if you are including descendants.
-5. Click the "Included Concepts" tab. Depending on what X's domain is (Drug, Condition, etc) filter to see just those concepts.
-6. Click the "CSV" button. This will download these concepts to a CSV file. 
-7. Override the corresponding "cure_id_{domain}.csv" file in the repo.
-8. Save the concept set in ATLAS, push changes to repo.
