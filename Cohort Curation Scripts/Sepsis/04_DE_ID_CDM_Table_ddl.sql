@@ -32,7 +32,7 @@ Filename:
 04_DE_ID_CDM_Table_ddl.sql
 
 Purpose:
-Generate the necessary tables for the de-identified version of the CURE ID Cohort
+Generate the necessary tables for the de-identified version of the Rediscover Cohort
 
 Description:
 By default this script will create tables in a schema titled “deident,”
