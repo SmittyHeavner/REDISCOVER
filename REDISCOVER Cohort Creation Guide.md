@@ -1,23 +1,25 @@
 # OMOP Cohort Creation and Deidentification Guide
 
-The following scripts are to be run on a site’s full OMOP dataset in order to prepare the relevant data for sharing with the VIRUS registry. Each script should be run on the same server as the OMOP data but can be customized to run on the preferred Database and Schema.
+The following scripts are to be run on a site’s full OMOP dataset in order to prepare the relevant data for sharing with the Rediscover registry team. Each script should be run on the same server as the OMOP data but can be customized to run on the preferred Database and Schema.
 
 ## Instructions
 Replace the database name and schema in each of these scripts with your own, then run the cohort creation and deidentification scripts in the following sequence:
 
-1. Cohort Creation (Filename: 01_CURE_ID_Cohort.sql)
+1. Concept table (Filename: 00_REDISCOVER_create_concept_table.sql)
+  
+2. Cohort Creation (Filename: 01_REDISCOVER_SEPSIS_cohort.sql)
 
-2. Generate CURE ID Tables (Filename: 02_CURE_ID_All_Tables.sql)
+3. Generate CURE ID Tables (Filename: 02_REDISCOVER_All_Tables.sql)
 
-3. Deidentify Rare Conditions (Filename: 03_CURE_ID_replace_rare_conditions_with_parents.sql)
+4. Deidentify Rare Conditions (Filename: 03_REDISCOVER_replace_rare_conditions_with_parents.sql)
 
-4. Generate OMOP Tables (Filename: 04_DE_ID_CDM_Table_ddl.sql)
+5. Generate OMOP Tables (Filename: 04_DE_ID_CDM_Table_ddl.sql)
 
-5. Remove Identifiers (Filename: 05_DE_ID_script.sql)
+6. Remove Identifiers (Filename: 05_DE_ID_script.sql)
 
-6. Run Data Quality Checks (Filename: 06_DE_ID_Quality_Checks.sql)
+7. Run Data Quality Checks (Filename: 06_DE_ID_Quality_Checks.sql)
 
-7. Profile Scripts
+8. Profile Scripts
    -  Profile Conditions (Filename: 07_A_condition_profile.sql)
    -  Profile Measurements (Filename: 07_B_measurement_profile.sql)
    -  Profile Drug Exposure (Filename: 07_C_drug_exposure_profile.sql)
@@ -26,16 +28,16 @@ Replace the database name and schema in each of these scripts with your own, the
 
 ## OMOP Cohort Creation and Deidentification Process
 
-### 1. Cohort Creation Script
+_### 1. Cohort Creation Script
 
 **Filename**: 01_CURE_ID_Cohort.sql
 
-**Purpose**: This script creates a cohort of patients for the CURE ID registry. The patient list is saved in the cohort table, along with other useful data elements.
+**Purpose**: This script creates a cohort of patients for the Rediscover registry. The patient list is saved in the cohort table, along with other useful data elements.
 
 **Description**: This SQL script creates a cohort of COVID-positive hospitalized patients based on specific criteria. The script performs several steps to identify and filter the patients before finally creating the cohort table. The script sets the context to use a specific database, but the actual name of the database is meant to be provided by the user.
 
 **Dependencies**: None
-
+_
 **Steps**:
 
 1.  Create cohort table.
