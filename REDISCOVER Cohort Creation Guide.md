@@ -5,21 +5,21 @@ The following scripts are to be run on a site’s full OMOP dataset in order to 
 ## Instructions
 Replace the database name and schema in each of these scripts with your own, then run the cohort creation and deidentification scripts in the following sequence:
 
-1. Concept table (Filename: 00_REDISCOVER_create_concept_table.sql)
+0. Concept table (Filename: 00_REDISCOVER_create_concept_table.sql)
   
-2. Cohort Creation (Filename: 01_REDISCOVER_SEPSIS_cohort.sql)
+1. Cohort Creation (Filename: 01_REDISCOVER_SEPSIS_cohort.sql)
 
-3. Generate CURE ID Tables (Filename: 02_REDISCOVER_All_Tables.sql)
+2. Generate REDISCOVER Tables (Filename: 02_REDISCOVER_All_Tables.sql)
 
-4. Deidentify Rare Conditions (Filename: 03_REDISCOVER_replace_rare_conditions_with_parents.sql)
+3. Deidentify Rare Conditions (Filename: 03_REDISCOVER_replace_rare_conditions_with_parents.sql)
 
-5. Generate OMOP Tables (Filename: 04_DE_ID_CDM_Table_ddl.sql)
+4. Generate OMOP Tables (Filename: 04_DE_ID_CDM_Table_ddl.sql)
 
-6. Remove Identifiers (Filename: 05_DE_ID_script.sql)
+5. Remove Identifiers (Filename: 05_DE_ID_script.sql)
 
-7. Run Data Quality Checks (Filename: 06_DE_ID_Quality_Checks.sql)
+6. Run Data Quality Checks (Filename: 06_DE_ID_Quality_Checks.sql)
 
-8. Profile Scripts
+7. Profile Scripts
    -  Profile Conditions (Filename: 07_A_condition_profile.sql)
    -  Profile Measurements (Filename: 07_B_measurement_profile.sql)
    -  Profile Drug Exposure (Filename: 07_C_drug_exposure_profile.sql)
@@ -30,37 +30,24 @@ Replace the database name and schema in each of these scripts with your own, the
 
 _### 1. Cohort Creation Script
 
-**Filename**: 01_CURE_ID_Cohort.sql
+**Filename**: 01_REDISCOVER_SEPSIS_cohort.sql
 
 **Purpose**: This script creates a cohort of patients for the Rediscover registry. The patient list is saved in the cohort table, along with other useful data elements.
 
-**Description**: This SQL script creates a cohort of COVID-positive hospitalized patients based on specific criteria. The script performs several steps to identify and filter the patients before finally creating the cohort table. The script sets the context to use a specific database, but the actual name of the database is meant to be provided by the user.
+**Description**: This SQL script creates a cohort of sepsis patients based on specific criteria. The script performs several steps to identify and filter the patients before finally creating the cohort table. The script sets the context to use a specific database, but the actual name of the database is meant to be provided by the user.
 
-**Dependencies**: None
-_
-**Steps**:
+**Dependencies**: Concept Table (Step 0)
 
-1.  Create cohort table.
-2.  Identify patients (inpatient and outpatient) with COVID positive lab results after January 1, 2020
-    - Use OMOP concepts that represent the LOINC codes for SARS-COV-2 nucleic acid test
-    - The concept ids here represent LOINC or SNOMED codes for standard ways to code a lab that is positive
-3.  Identify the first positive COVID test per patient
-4.  Limit to COVID-positive patients with inpatient encounters
-5.  Apply all inclusion/exclusion criteria to identify all patients hospitalized with symptomatic COVID-19 up to 21 days after a positive SARS-COV-2 test or up to 7 days prior to a positive SARS-COV-2 test
-6.  Find the closest inpatient encounter to first positive SARS-COV-2 test (for patients hospitalized more than once)
-7.  Account for edge cases where patients have two hospitalizations same number of absolute days from SARS-COV-2 test (Ex: Patient hospitalized separately 3 days before and 3 days after SARS-COV-2 test)
-8.  Create the cohort by adding on birth date and death date
+### 2. REDISCOVER Tables Script
 
-### 2. CURE ID Tables Script
+**Filename**: 02_REDISCOVER_All_Tables.sql
 
-**Filename**: 02_CURE_ID_All_Tables.sql
+**Purpose**: This script takes your OMOP dataset and generates a copy of key tables that have been filtered down to only include people and records related to the registry.
 
-**Purpose**: This script takes your OMOP dataset and generates a copy of key tables that have been filtered down to only include people and records related to the CURE ID registry.
-
-**Description**: Creates CURE_ID tables from the generated CURE_ID cohort.
+**Description**: Creates REDISCOVER_ID tables from the generated REDISCOVER_ID cohort.
 
 **Dependencies**:
-- 01_CURE_ID_Cohort.sql
+- 01_REDISCOVER_SEPSIS_cohort.sql
 
 **Steps**:
 
@@ -76,15 +63,15 @@ _
 
 ### 3. Replace Rare Conditions Script
 
-**Filename**: 03_CURE_ID_replace_rare_conditions_with_parents.sql
+**Filename**: 03_REDISCOVER_replace_rare_conditions_with_parents.sql
 
 **Purpose**: Replace conditions occurring 10 or less times in the dataset with parent concepts that have at least 10 counts
 
 **Description**: This script is run after scripts 01 and 02
 
 **Dependencies**:
-- 01_CURE_ID_Cohort.sql
-- 02_CURE_ID_All_Tables.sql
+- 01_REDISCOVER_SEPSIS_cohort.sql
+- 02_REDISCOVER_All_Tables.sql
 
 **Steps**:
 
@@ -96,9 +83,9 @@ _
 
 ### 4. Deidentified Data DDL Script
 
-**Filename**: 04_DE_ID_CDM_Table_ddl.sql
+**Filename**: 04_DE_ID_CDM_Table_ddl.sql 
 
-**Purpose**: Generate the necessary tables for the de-identified version of the CURE ID Cohort
+**Purpose**: Generate the necessary tables for the de-identified version of the Rediscover Cohort
 
 **Description**: This script will create tables in the Results schema and preface the table names with 'deident.' However, the preface can be set to whatever value you desire.
 
@@ -120,7 +107,7 @@ _
 
 **Filename**: 05_DE_ID_script.sql
 
-**Purpose**: This script creates a copy of the Cohort and removes identifying characteristics to prepare the data for sharing with the VIRUS registry.
+**Purpose**: This script creates a copy of the Cohort and removes identifying characteristics to prepare the data for sharing.
 
 **Description**: Run this script to generate a deidentified copy of your target data. The following actions are performed:
 - Reassignment of Person IDs: Person IDs are regenerated sequentially from a sorted copy of the Person table. These new Person IDs are carried throughout the CDM to all tables that reference it.
@@ -134,9 +121,9 @@ _
 - Removal of Other Identifiers: Other potentially identifying datapoints are removed from the dataset such as location_id, provider_id, and care_site_id
 
 **Dependencies**:
-- 01_CURE_ID_Cohort.sql
-- 02_CURE_ID_All_Tables.sql
-- 03_CURE_ID_replace_rare_conditions_with_parents.sql
+- 01_REDISCOVER_SEPSIS_cohort.sql
+- 02_REDISCOVER_All_Tables.sql
+- 03_REDISCOVER_replace_rare_conditions_with_parents.sql
 - 04_DE_ID_CDM_Table_ddl.sql
 
 **Steps**:
@@ -161,9 +148,9 @@ _
 **Description**: This script runs a number of summary level quality checks for each table to audit basic data counts and date ranges.
 
 **Dependencies**:
-- 01_CURE_ID_Cohort.sql
-- 02_CURE_ID_All_Tables.sql
-- 03_CURE_ID_replace_rare_conditions_with_parents.sql
+- 01_REDISCOVER_SEPSIS_cohort.sql
+- 02_REDISCOVER_All_Tables.sql
+- 03_REDISCOVER_replace_rare_conditions_with_parents.sql
 - 04_DE_ID_CDM_Table_ddl.sql
 - 05_DE_ID_script.sql
 
@@ -182,9 +169,9 @@ _
 
 **Dependencies**: These scripts require the populated deidentified OMOP tables generated from the sequence of running scripts 1-5:
 
-- 01_CURE_ID_Cohort.sql
-- 02_CURE_ID_All_Tables.sql
-- 03_CURE_ID_replace_rare_conditions_with_parents.sql
+- 01_REDISCOVER_SEPSIS_cohort.sql
+- 02_REDISCOVER_All_Tables.sql
+- 03_REDISCOVER_replace_rare_conditions_with_parents.sql
 - 04_DE_ID_CDM_Table_ddl.sql
 - 05_DE_ID_script.sql
 
@@ -218,7 +205,7 @@ _
 
     **Purpose**: Generate a profile of drugs that are not mapped to drug_concept_ids in the final cohort.
 
-    **Description**: This file filters drugs that were unsuccessfully mapped to a drug_concept_id when running the 02_CURE_ID_All_Tables.sql script. Drug source values for which the drug_concept_id is “0” and have at least 20 instances in the final cohort are aggregated for manual review.
+    **Description**: This file filters drugs that were unsuccessfully mapped to a drug_concept_id when running the 02_REDISCOVER_All_Tables.sql script. Drug source values for which the drug_concept_id is “0” and have at least 20 instances in the final cohort are aggregated for manual review.
     \*\* Drug source values can contain PHI. Please review the output for PHI before sharing.
 
     ##### 07-E – Device Profile
