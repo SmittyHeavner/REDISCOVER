@@ -28,7 +28,7 @@ Replace the database name and schema in each of these scripts with your own, the
 
 ## OMOP Cohort Creation and Deidentification Process
 
-_### 1. Cohort Creation Script
+### 1. Cohort Creation Script
 
 **Filename**: 01_REDISCOVER_SEPSIS_cohort.sql
 
