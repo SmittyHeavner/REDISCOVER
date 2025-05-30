@@ -153,7 +153,7 @@ VALUES
 ('2004208005', 'NA', 'Room air (in the context of a device)', 'Device', 'Custom', 'C', 'FALSE'),
 ('2004208006', 'NA', 'CPAP (continuous positive airway pressure)', 'Device', 'Custom', 'C', 'FALSE'),
 ('2004208007', 'NA', 'BiPAP (bilevel positive airway pressure)', 'Device', 'Custom', 'C', 'FALSE'),
-('2004208008', 'NA', 'NIPPV (non-invasive positive pressure ventilation or nasal intermittent positive pressure ventilation)', 'Device', 'Custom', 'C', 'FALSE')
+('2004208008', 'NA', 'NIPPV (non-invasive positive pressure ventilation or nasal intermittent positive pressure ventilation)', 'Device', 'Custom', 'C', 'FALSE'),
 ('3037256', '9095-1', 'Fluid balance 10 hour', 'Measurement', 'LOINC', 'S', 'TRUE'), 
 ('3037769', '9096-9', 'Fluid balance 12 hour', 'Measurement', 'LOINC', 'S', 'TRUE'), 
 ('4092647', '251992000', 'Fluid intake', 'Measurement', 'SNOMED', 'S', 'TRUE'), 
